@@ -1,0 +1,92 @@
+﻿<Extensions>
+  <Version>1.5</Version>
+  <Panel>
+    <PanelId>panel_1</PanelId>
+    <Type>InCall</Type>
+    <Icon>Record</Icon>
+    <Name>SSA VideoMail</Name>
+    <Page>
+      <Name>SSA VideoMail</Name>
+      <Row>
+        <Name>Message Playback</Name>
+        <Widget>
+          <WidgetId>numberOfMessages</WidgetId>
+          <Name/>
+          <Type>Text</Type>
+          <Options>size=4;align=center;fontSize=normal</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>key_delButton_3</WidgetId>
+          <Name>Delete Current Message</Name>
+          <Type>Button</Type>
+          <Options>size=4</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>key_repeatButton_1</WidgetId>
+          <Name>Repeat</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>key_saveButton_2</WidgetId>
+          <Name>Save</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+      </Row>
+      <Row>
+        <Name/>
+      </Row>
+      <Row>
+        <Name/>
+        <Widget>
+          <WidgetId>cmd_re-enterPIN</WidgetId>
+          <Name>Re-Enter PIN</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>cmd_exit</WidgetId>
+          <Name>Exit Mailbox</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+      </Row>
+      <Options/>
+    </Page>
+    <Page>
+      <Name>Mailbox Setup</Name>
+      <Row>
+        <Name>Greetings</Name>
+        <Widget>
+          <WidgetId>setupText</WidgetId>
+          <Name/>
+          <Type>Text</Type>
+          <Options>size=4;align=center</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>cmd_recGreeting</WidgetId>
+          <Name>Record Greeting</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>cmd_stophangup</WidgetId>
+          <Name>Stop Rec &amp; Set</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+      </Row>
+      <Row>
+        <Name>PIN</Name>
+        <Widget>
+          <WidgetId>cmd_resetPIN</WidgetId>
+          <Name>Set/Reset PIN</Name>
+          <Type>Button</Type>
+          <Options>size=2</Options>
+        </Widget>
+      </Row>
+      <Options/>
+    </Page>
+  </Panel>
+</Extensions>

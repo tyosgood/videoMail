@@ -29,7 +29,7 @@ const xapi = require('xapi');
 var isInVmCall = 0;
 var vmURI;
 var messageWaiting = 0;
-var forwarded;
+var forwarded = false;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -37,14 +37,20 @@ function sleep(ms) {
 
 //Set VM pilot number
 xapi.status.get('SIP Mailbox URI').then(URI => vmURI = URI );
-xapi.status.get('SIP Mailbox MessagesWaiting').then(MWI => messageWaiting = MWI )
-setGUIvalues("numberOfMessages","You currently have " + messageWaiting + " new messages ");
+
+//Initialize the number of waiting voicemail messages and set the GUI
+xapi.status.get('SIP Mailbox MessagesWaiting').then(MWI => {
+  messageWaiting = MWI;
+  setGUIvalues("numberOfMessages","You currently have " + messageWaiting + " new messages ");
+});
+
 
 
 
 //this fires when the number of VM messages changes
 xapi.status.on('SIP Mailbox MessagesWaiting', (MWI) =>{
   setGUIvalues("numberOfMessages","You currently have " + MWI + " new messages" );
+  vmURI = MWI;
 });
 
 
@@ -61,7 +67,7 @@ xapi.event.on('CallDisconnect', (event) => {
 
 //this fires when a call is placed and then calls the pin entry if the call is to the VM pilot
 xapi.status.on('Call RemoteNumber', (remoteNumber) => {
-	console.log("in Status Call");
+	console.log("in Status Call" + remoteNumber);
 	//the extra logic here is needed to prevent the PIN screen popping up when a call is forwarded to voicemail
 	if(remoteNumber.includes(vmURI) && !forwarded){
 	    isInVmCall = 1;
@@ -69,13 +75,12 @@ xapi.status.on('Call RemoteNumber', (remoteNumber) => {
 	}
 	  else {
 	    forwarded = true;
-	    sleep(2500).then(() => {
-	              forwarded = false;
-	            });
+	    sleep(2500).then(() => {forwarded = false;});
 	  }
     });
 
 xapi.event.on('UserInterface Message TextInput Response', (event) => {
+	console.log(event);
 	switch(event.FeedbackId){
         case 'vmpin':
 	          xapi.status.get('SIP Mailbox MessagesWaiting').then(MWI => messageWaiting = MWI );
@@ -92,7 +97,7 @@ xapi.event.on('UserInterface Message TextInput Response', (event) => {
 	                    }
 	                    
 	          //wait for CUC to start playing the new messages - adjust 5000 as necessary
-	          sleep(5000).then(() => {
+	          sleep(6500).then(() => {
 	                if (messageWaiting > 0) {xapi.command('UserInterface Message Alert Display',
 	                      {
 	                        Title: "Your Messages should be playing - if they are not, your pin was entered incorrectly",
@@ -159,15 +164,11 @@ xapi.event.on('UserInterface Extensions Widget Action', (event) => {
                   break;
               case 'resetPIN':
                   sendDTMF('431');
-                  sleep(500).then(() => {
-                    enterVmPin("resetPin","Enter a new PIN of at least 6 digits");
-                  });
+                  sleep(500).then(() => enterVmPin("resetPin","Enter a new PIN of at least 6 digits"));
                   break;
               case 'recGreeting':
                   sendDTMF('411');
-                  sleep(5000).then(() => {
-                    setGUIvalues('setupText', 'Record your greeting now');
-                  });
+                  sleep(5000).then(() => {setGUIvalues('setupText', 'Record your greeting now');});
                   break;
           }
           break;

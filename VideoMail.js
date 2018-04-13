@@ -30,6 +30,7 @@ var isInVmCall = 0;
 var vmURI;
 var messageWaiting = 0;
 var forwarded = false;
+var currentMenu;
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -50,7 +51,7 @@ xapi.status.get('SIP Mailbox MessagesWaiting').then(MWI => {
 //this fires when the number of VM messages changes
 xapi.status.on('SIP Mailbox MessagesWaiting', (MWI) =>{
   setGUIvalues("numberOfMessages","You currently have " + MWI + " new messages" );
-  vmURI = MWI;
+  messageWaiting = MWI;
 });
 
 
@@ -62,6 +63,7 @@ xapi.event.on('CallDisconnect', (event) => {
 	  xapi.command('UserInterface Message TextLine Clear');
 	  setGUIvalues("setupText"," ");
 	  isInVmCall = 0;
+	  currentMenu = null;
 	  }
   });
 
@@ -156,21 +158,31 @@ xapi.event.on('UserInterface Extensions Widget Action', (event) => {
                   xapi.command('Call Disconnect');
                   break;
               case 'stophangup':
+                  if (messageWaiting == 0){
                   sendDTMF('#');
                   setGUIvalues('setupText', ' ');
                   sleep(1000).then(() => {
                       xapi.command('Call Disconnect');
-                  });
+                  });}
                   break;
               case 'resetPIN':
+                  if (messageWaiting == 0){
                   sendDTMF('431');
-                  sleep(500).then(() => enterVmPin("resetPin","Enter a new PIN of at least 6 digits"));
+                  sleep(500).then(() => enterVmPin("resetPin","Enter a new PIN of at least 6 digits"));}
                   break;
               case 'recGreeting':
-                  sendDTMF('411');
-                  sleep(5000).then(() => {setGUIvalues('setupText', 'Record your greeting now');});
+                  if (messageWaiting == 0){
+                    if (currentMenu == 'viewGreeting') sendDTMF('1');
+                    else sendDTMF('411');
+                    sleep(5000).then(() => {setGUIvalues('setupText', 'Record your greeting now');});}
                   break;
-          }
+              case 'viewGreeting':
+                  if (messageWaiting == 0){
+                    currentMenu = 'viewGreeting';
+                    sendDTMF('41');
+                  }
+                  break;
+            }
           break;
             
       }

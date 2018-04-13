@@ -4,6 +4,8 @@
     <PanelId>panel_1</PanelId>
     <Type>InCall</Type>
     <Icon>Record</Icon>
+    <Order>1</Order>
+    <Color>#FF3D67</Color>
     <Name>SSA VideoMail</Name>
     <Page>
       <Name>SSA VideoMail</Name>
@@ -52,7 +54,8 @@
           <Options>size=2</Options>
         </Widget>
       </Row>
-      <Options/>
+      <PageId>mainMenu</PageId>
+      <Options>hideRowNames=0</Options>
     </Page>
     <Page>
       <Name>Mailbox Setup</Name>
@@ -62,7 +65,13 @@
           <WidgetId>setupText</WidgetId>
           <Name/>
           <Type>Text</Type>
-          <Options>size=4;align=center</Options>
+          <Options>size=4;align=center;fontSize=small</Options>
+        </Widget>
+        <Widget>
+          <WidgetId>cmd_viewGreeting</WidgetId>
+          <Name>View Current Greeting</Name>
+          <Type>Button</Type>
+          <Options>size=4</Options>
         </Widget>
         <Widget>
           <WidgetId>cmd_recGreeting</WidgetId>
@@ -86,7 +95,8 @@
           <Options>size=2</Options>
         </Widget>
       </Row>
-      <Options/>
+      <PageId>mailboxSetup</PageId>
+      <Options>hideRowNames=0</Options>
     </Page>
   </Panel>
 </Extensions>
